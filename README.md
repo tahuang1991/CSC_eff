@@ -27,7 +27,7 @@ scramv1 b
 </pre>
 
 ## Make the Ntuple
-1. Config the variable `datatype` in [Run_2017_test2_condor.py](CSCefficiency/Run_2017_test2_condor.py): 
+1. Config the variable `datatype` in [Run_2017_test2_condor.py](CSCEfficiency/CSCEfficiency/Run_2017_test2_condor.py): 
 <pre>datatype="RAW"#
 #Candidates are for data: "RAW" "RAW-RECO" "FEVT"
 #for mc: in order of suggestions: "GEN-RAWDEBUG"(mc) "GEN-SIM-RAW"(mc) "GEN-RAW"(mc) "GEN-SIM"
