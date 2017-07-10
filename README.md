@@ -2,7 +2,7 @@
 ====================
 
 ## About
---- tested in CMSSW_5_x_x, not tested in CMSSW_6_x_x
+--- tested in CMSSW_9_2_3_patch2
 * It is based on the tag-and-probe method using the Z pole or the J/ψ pole;
 * The efficiency obtained is the CSC detector efficiency times the efficiency that the muon is not scattered.
 * Need RAW information to get the LCT efficiency. RECO or AOD sample is not good.
@@ -18,11 +18,11 @@
    
 ## Installation
 <pre>
-cd CMSSW_5_x_x
+cd CMSSW_9_2_3_patch2
 cmsenv
 mkdir CSCEfficiency
 cd CSCEfficiency
-git clone git@github.com:zhang8473/CSCEfficiency.git
+git clone git@github.com:senka/CSC_eff_9_2_3_patch2.git
 scramv1 b
 </pre>
 
