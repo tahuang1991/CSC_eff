@@ -81,7 +81,7 @@ hadd Ntuple.root CSCPFG_Ineff_DATA*.root
     </tr>
    </table> 
    4. Arrange space for the temporary file (you may change the path but not the file name): 
-      It may take two times the size of the Ntuple file space. The variable is `TemporaryOutputFile`. By default,        it will use the linux temporary path: /tmp/.
+      It may take two times the size of the Ntuple file space. The variable is `TemporaryOutputFile`. By default, it will use the linux         temporary path: /tmp/.
    5. Tag and probe file (do not need to change): The variable is `TagProbeFitResult`.
    6. result file (do not need to change): The variable is `ResultPlotsFileName`.
    7. **Setup the pileup reweighting scheme for simulation sample**: The variable of the data pileup weight file is  `DataPileupRootFileName`. This is the file made by [estimatePileup2.py](https://cmssdt.cern.ch/SDT/lxr/source/RecoLuminosity/LumiDB/scripts/estimatePileup2.py) in CMSSW. One can see [the twiki page](https://twiki.cern.ch/twiki/bin/view/CMS/PileupMCReweightingUtilities) to learn how to make such file corresponding to data. The `pileup_mc` is the pileup weight used to generate the simulation sample, one can get it directly from the CMSSW package, for example:
