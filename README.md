@@ -37,7 +37,7 @@ The default output file name is 'CSCPFG_Ineff_DATA.root' ---
 process.aoddump.rootFileName=cms.untracked.string('CSCPFG_Ineff_DATA.root')
 </pre>
 
-2. Run [NtupleMaker.py](NtupleMaker.py) using Crab or locally. After all jobs finished, combine the output root files into one:
+2. Run [Run_2017_test2_condor.py](CSCEfficiency/CSCEfficiency/Run_2017_test2_condor.py) using Crab or locally. After all jobs finished, combine the output root files into one:
 <pre>
 hadd Ntuple.root CSCPFG_Ineff_DATA*.root
 </pre>
