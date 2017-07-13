@@ -83,14 +83,8 @@ hadd Ntuple.root CSCPFG_Ineff_DATA*.root
    4. Arrange space for the temporary file (you may change the path but not the file name): 
       It may take two times the size of the Ntuple file space. The variable is `TemporaryOutputFile`. By default, it will use the linux         temporary path: /tmp/.
    5. Tag and probe file (do not need to change): The variable is `TagProbeFitResult`.
-   6. result file (do not need to change): The variable is `ResultPlotsFileName`.
-   7. **Setup the pileup reweighting scheme for simulation sample**: The variable of the data pileup weight file is  `DataPileupRootFileName`. This is the file made by [estimatePileup2.py](https://cmssdt.cern.ch/SDT/lxr/source/RecoLuminosity/LumiDB/scripts/estimatePileup2.py) in CMSSW. One can see [the twiki page](https://twiki.cern.ch/twiki/bin/view/CMS/PileupMCReweightingUtilities) to learn how to make such file corresponding to data. The `pileup_mc` is the pileup weight used to generate the simulation sample, one can get it directly from the CMSSW package, for example:
-   <pre>
-   from SimGeneral.MixingModule.mix_2012_Startup_50ns_PoissonOOTPU_cfi import mix
-   pileup_mc=mix.input.nbPileupEvents.probValue
-   </pre>
-   The mixing module used for each MC sample is described in [the pileup information twiki page](https://twiki.cern.ch/twiki/bin/viewauth/CMS/PileupInformation).
-  8. Station categorizing method: variable `station` is a python dictionary. The format of each component in the dictionary is "key(index):(logic expression in C style,name,color,station number)". e.g.,
+   6. result file (do not need to change): The variable is `ResultPlotsFileName`
+   7. Station categorizing method: variable `station` is a python dictionary. The format of each component in the dictionary is "key(index):(logic expression in C style,name,color,station number)". e.g.,
    <pre>
    stations={
     ......
