@@ -101,7 +101,8 @@ hadd Ntuple.root CSCPFG_Ineff_DATA*.root
    <pre> python Step1_matchOtherStationsORME13.py Ntuple.root </pre>
 3. Wait until all jobs finished. Use `ps -f` to check.
 4. Make the plot:
-   <pre> python Step2_PlotAll.py </pre>
+   <pre> python Step2_PlotAll_pallete_lct.py input_dir </pre>
+   <pre> python Step2_PlotAll_pallete_seg.py input_dir </pre>
    Advanced Usage of [Step2_PlotAll.py](NtupleAnzScripts/Step2_PlotAll.py):
    <pre> python Step2_PlotAll.py arg1 arg2 </pre>
    * arg1 is the name of the directory that stores the TagandProbe result files;
