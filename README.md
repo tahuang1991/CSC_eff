@@ -18,11 +18,11 @@
    
 ## Installation
 <pre>
-cd CMSSW_9_2_3_patch2
+cmsrel CMSSW_9_2_3_patch2
+cd CMSSW_9_2_3_patch2/src
 cmsenv
 mkdir CSCEfficiency
-cd CSCEfficiency
-git clone git@github.com:senka/CSC_eff_9_2_3_patch2.git
+git clone https://github.com/senka/CSC_eff_9_2_3_patch2 CSCEfficiency
 scramv1 b
 </pre>
 
