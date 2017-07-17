@@ -28,10 +28,6 @@ scramv1 b
 
 ## Make the Ntuple
 1. Config the variable `datatype` in [Run_2017_92X_dataRun2_July6ReReco_PixelCommissioning_v2_condor.py](CSCEfficiency/CSCEfficiency/Run_2017_92X_dataRun2_July6ReReco_PixelCommissioning_v2_condor.py): 
-<pre>datatype="RAW"#
-#Candidates are for data: "RAW" "RAW-RECO" "FEVT"
-#for mc: in order of suggestions: "GEN-RAWDEBUG"(mc) "GEN-SIM-RAW"(mc) "GEN-RAW"(mc) "GEN-SIM"
-</pre>
 The default output file name is 'CSCPFG_Ineff_DATA.root' ---
 <pre>
 process.aoddump.rootFileName=cms.untracked.string('CSCPFG_Ineff_DATA.root')
