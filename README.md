@@ -38,7 +38,7 @@ process.aoddump.rootFileName=cms.untracked.string('CSCPFG_Ineff_DATA.root')
 farmoutAnalysisJobs  --input-files-per-job=1  --skip-existing-output CSCeff_job $CMSSW_BASE $CMSSW_BASE/src/CSCEfficiency/CSCEfficiency/Run_2017_92X_dataRun2_July6ReReco_PixelCommissioning_v2_condor.py --input-file-list=$CMSSW_BASE/src/CSCEfficiency/CSCEfficiency/input_RAWfiles 'inputFiles=$inputFileNames' 'outputFile=$outputFileName' --assume-input-files-exist --vsize-limit=7000
 </pre>
 
-or locally:
+or locally [Run_2017_test2_PixComm_local.py](CSCEfficiency/CSCEfficiency/Run_2017_test2_PixComm_local.py):
 <pre>
 cmsRun Run_2017_test2_PixComm_local.py
 </pre>
