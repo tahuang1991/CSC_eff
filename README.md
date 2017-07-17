@@ -27,7 +27,7 @@ scramv1 b
 </pre>
 
 ## Make the Ntuple
-1. Config the variable `datatype` in [Run_2017_92X_dataRun2_July6ReReco_PixelCommissioning_v2_condor.py](CSCEfficiency/CSCEfficiency/Run_2017_92X_dataRun2_July6ReReco_PixelCommissioning_v2_condor.py): 
+1. Config file [Run_2017_92X_dataRun2_July6ReReco_PixelCommissioning_v2_condor.py](CSCEfficiency/CSCEfficiency/Run_2017_92X_dataRun2_July6ReReco_PixelCommissioning_v2_condor.py): 
 The default output file name is 'CSCPFG_Ineff_DATA.root' ---
 <pre>
 process.aoddump.rootFileName=cms.untracked.string('CSCPFG_Ineff_DATA.root')
