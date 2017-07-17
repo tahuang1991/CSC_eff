@@ -49,7 +49,7 @@ hadd Ntuple.root CSCPFG_Ineff_DATA*.root
 </pre>
 
 ## Make the Efficiency plots
-1. Setup  [Config.py](NtupleAnzScripts/Config.py).
+1. Setup  [Config.py](CSCEfficiency/NtupleAnzScripts/Config.py).
    1. Setup for Data or for MC:
    <pre>
     RunOnMC=False # or True
