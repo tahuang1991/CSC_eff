@@ -60,7 +60,7 @@ hadd Ntuple.root CSCPFG_Ineff_DATA*.root
    </pre>
    3. Setup how to categorize the data:
    <pre>
-   Group="Stations" #x axis: stations; y axis: efficiency
+   Group="Chambers" #x axis: stations; y axis: efficiency
    #options are
    </pre>
    <table style="width:100%"  align="center">
