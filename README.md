@@ -98,11 +98,12 @@ hadd Ntuple.root CSCPFG_Ineff_DATA*.root
     ......}
    </pre>
 2. Categorize the data and run the tag-and-probe package in CMSSW:
-   <pre> python Step1_matchOtherStationsORME13.py Ntuple.root </pre>
+   <pre> cd NtupleAnzScripts
+   python Step1_matchOtherStationsORME13.py Ntuple.root 
+   </pre>
 3. Wait until all jobs finished. Use `ps -f` to check.
 4. Make the plot:
-   <pre> 
-   cd NtupleAnzScripts
+   <pre>
    python Step2_PlotAll_pallete.py input_dir 
    </pre>
    Advanced Usage of [Step2_PlotAll.py](NtupleAnzScripts/Step2_PlotAll.py):
