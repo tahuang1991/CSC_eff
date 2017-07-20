@@ -33,6 +33,12 @@ The default output file name is 'CSCPFG_Ineff_DATA.root' ---
 process.aoddump.rootFileName=cms.untracked.string('CSCPFG_Ineff_DATA.root')
 </pre>
 
+Choose if you want to save Z or/and J/psi events: 
+<pre>                               
+  saveZ            = cms.untracked.bool(True),
+  saveJPsi            = cms.untracked.bool(False),
+</pre>
+
 2. Run [Run_2017_92X_dataRun2_July6ReReco_PixelCommissioning_v2_condor.py](CSCEfficiency/Run_2017_92X_dataRun2_July6ReReco_PixelCommissioning_v2_condor.py) using condor:
 <pre>
 farmoutAnalysisJobs  --input-files-per-job=1  --skip-existing-output CSCeff_job $CMSSW_BASE $CMSSW_BASE/src/CSCEfficiency/Run_2017_92X_dataRun2_July6ReReco_PixelCommissioning_v2_condor.py --input-file-list=$CMSSW_BASE/src/CSCEfficiency/input_RAWfiles 'inputFiles=$inputFileNames' 'outputFile=$outputFileName' --assume-input-files-exist --vsize-limit=7000
