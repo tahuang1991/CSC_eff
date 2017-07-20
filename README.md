@@ -36,7 +36,7 @@ process.aoddump.rootFileName=cms.untracked.string('CSCPFG_Ineff_DATA.root')
 Choose if you want to save Z or/and J/psi events: 
 <pre>                               
 saveZ            = cms.untracked.bool(True),
-saveJPsi            = cms.untracked.bool(False),
+saveJPsi         = cms.untracked.bool(False),
 </pre>
 
 2. Run [Run_2017_92X_dataRun2_July6ReReco_PixelCommissioning_v2_condor.py](CSCEfficiency/Run_2017_92X_dataRun2_July6ReReco_PixelCommissioning_v2_condor.py) using condor:
