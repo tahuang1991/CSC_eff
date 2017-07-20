@@ -124,6 +124,8 @@ vtxsrc_= pSet_.getUntrackedParameter<std::string>("vtxsrc","offlinePrimaryVertic
   ///  Now the MC specific information... if available...
   //
   m_isMC     = Conf.getUntrackedParameter<bool>("isMC");
+  m_saveZ     = Conf.getUntrackedParameter<bool>("saveZ");
+  m_saveJPsi     = Conf.getUntrackedParameter<bool>("saveJPsi");
   m_mcTag = Conf.getUntrackedParameter<edm::InputTag>("mcTag"); //
  
   // flags to switch on/off individual modules 
@@ -384,7 +386,7 @@ void
 TPTrackMuonSys::analyze(const edm::Event& event, const edm::EventSetup& setup){
   //cout << "HERE *************************" << endl;
 
-  //cout <<"\t\t TPTrackMuonSys::analyze..."<<endl;
+  cout <<"\t\t ************************>>>>>>>>>>>   TPTrackMuonSys::analyze..."<<endl;
 
   nEventsAnalyzed++;
   Nevents_all=nEventsAnalyzed;
@@ -954,9 +956,9 @@ TPTrackMuonSys::analyze(const edm::Event& event, const edm::EventSetup& setup){
 
     Float_t mu1Chi2 = muIter1->track()->normalizedChi2();
     MuTagHitsTrkSys  = muIter1->track()->hitPattern().numberOfValidTrackerHits();
-    //    Bool_t goodTrack  = (fabs(mu1dxy) < 2.0 && fabs(mu1dz) < 24.0 && fabs(mu1Chi2) < 4.0 && MuTagHitsTrkSys > 7 ); //&& MuTagHitsMuSys > 3 
+        Bool_t goodTrack  = (fabs(mu1dxy) < 2.0 && fabs(mu1dz) < 24.0 && fabs(mu1Chi2) < 4.0 && MuTagHitsTrkSys > 7 ); //&& MuTagHitsMuSys > 3 
     //    Bool_t goodTrack  = (fabs(mu1dxy) < 5.0 && fabs(mu1dz) < 50.0 && fabs(mu1Chi2) < 4.0 && MuTagHitsTrkSys > 7 ); //&& MuTagHitsMuSys > 3 
-    Bool_t goodTrack  = (fabs(mu1dxy) < 10.0 && fabs(mu1dz) < 100.0 && fabs(mu1Chi2) < 10.0 && MuTagHitsTrkSys > 3 ); //&& MuTagHitsMuSys > 3 
+//    Bool_t goodTrack  = (fabs(mu1dxy) < 10.0 && fabs(mu1dz) < 100.0 && fabs(mu1Chi2) < 10.0 && MuTagHitsTrkSys > 3 ); //&& MuTagHitsMuSys > 3 
     if(!goodTrack)continue;
 
 
@@ -1158,10 +1160,10 @@ TPTrackMuonSys::analyze(const edm::Event& event, const edm::EventSetup& setup){
       MuProbenHitsTrkSys  = itTrack->hitPattern().numberOfValidTrackerHits();
       MuProbenHitsPixSys  = itTrack->hitPattern().numberOfValidPixelHits();
        
-      //      goodTrack = ( fabs(itTrack->eta())< 2.4 && fabs(tracks_dz)< 24.0 && 
-      //		    fabs(tracks_dxy)< 2.0 && tracks_chi2> 0.0 &&  tracks_chi2< 4.0 && MuProbenHitsTrkSys > 7 );
-      goodTrack = ( fabs(itTrack->eta())< 2.4 && fabs(tracks_dz)< 100.0 && 
-		    fabs(tracks_dxy)< 10.0 && tracks_chi2> 0.0 &&  tracks_chi2< 10.0 && MuProbenHitsTrkSys > 3 );
+           goodTrack = ( fabs(itTrack->eta())< 2.4 && fabs(tracks_dz)< 24.0 && 
+      		    fabs(tracks_dxy)< 2.0 && tracks_chi2> 0.0 &&  tracks_chi2< 4.0 && MuProbenHitsTrkSys > 7 );
+      // goodTrack = ( fabs(itTrack->eta())< 2.4 && fabs(tracks_dz)< 100.0 && 
+//		    fabs(tracks_dxy)< 10.0 && tracks_chi2> 0.0 &&  tracks_chi2< 10.0 && MuProbenHitsTrkSys > 3 );
 
 //      goodTrack = ( fabs(itTrack->eta())< 2.4 && fabs(tracks_dz)< 50.0 &&
 //                    fabs(tracks_dxy)< 5.0 && tracks_chi2> 0.0 &&  tracks_chi2< 4.0 && MuProbenHitsTrkSys > 7 );
@@ -1219,15 +1221,16 @@ TPTrackMuonSys::analyze(const edm::Event& event, const edm::EventSetup& setup){
 	tracks_isTrackerMuTrk=false;
       }
 
-      /*
+      
       Bool_t trQuality = (fabs(MuTagEta) < 2.4 && fabs(tracks_eta) > 0.9 && fabs(tracks_eta) < 2.4 
 			  && tracks_etaError < 0.003 && tracks_phiError < 0.003 
 			  && tracks_ptError/tracks_pt < 0.05 && tracks_numberOfValidHits >= 10); // cuts removed from the SkimDPG.C file and put here...
-      */
+      
+/*
       Bool_t trQuality = (fabs(MuTagEta) < 2.4 && fabs(tracks_eta) > 0.9 && fabs(tracks_eta) < 2.4 
 			  && tracks_etaError < 0.03 && tracks_phiError < 0.03 
 			  && tracks_ptError/tracks_pt < 0.1 && tracks_numberOfValidHits >= 5); // cuts removed from the SkimDPG.C file and put here...
-
+*/
       if(!trQuality)continue;
 
       Float_t mMu = 0.1134289256;
@@ -1240,8 +1243,18 @@ TPTrackMuonSys::analyze(const edm::Event& event, const edm::EventSetup& setup){
       
       if(invMass < 0) continue;
       invMass = sqrt(invMass);
+
+      /*
       Bool_t gotMass =  ((invMass > 2.5 &&  invMass < 3.6) || (invMass > 75.)) ;
       if(!gotMass)continue;
+      */
+
+      Bool_t gotMass =  false;
+
+      if ( m_saveZ and invMass > 75. ) gotMass =  true; 
+      if ( m_saveJPsi and (invMass > 2.5 &&  invMass < 3.6) ) gotMass =  true; 
+      if(!gotMass)continue;
+
 
       /*------------------------Start getting the Monte Carlo Truth--------------------------*/
       tracktruth_pt  = -9999.;

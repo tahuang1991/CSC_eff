@@ -353,6 +353,7 @@ class TPTrackMuonSys : public edm::EDAnalyzer {
 
 
   Bool_t m_isMC, m_doTrigger, m_doTrack, m_doMuon, m_doElectron, m_doEIDAndIso, m_doPhoton, m_doGenPart;
+  Bool_t m_saveZ,m_saveJPsi;
   Bool_t m_doTau, m_doJet, m_doBJet, m_doMET, m_doCaloTiming, m_doIslandHybrid;
   edm::InputTag m_gTracksTag, m_fitTracksTag, m_electronTag, m_muonTag, m_photonTag, m_mcTag;
   edm::InputTag m_jet0Tag, m_jet1Tag, m_jet2Tag, m_jet3Tag, m_jet4Tag, m_jet5Tag, m_jet6Tag;
