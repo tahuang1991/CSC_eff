@@ -386,7 +386,7 @@ void
 TPTrackMuonSys::analyze(const edm::Event& event, const edm::EventSetup& setup){
   //cout << "HERE *************************" << endl;
 
-  cout <<"\t\t ************************>>>>>>>>>>>   TPTrackMuonSys::analyze..."<<endl;
+ // cout <<"\t\t ************************>>>>>>>>>>>   TPTrackMuonSys::analyze..."<<endl;
 
   nEventsAnalyzed++;
   Nevents_all=nEventsAnalyzed;
