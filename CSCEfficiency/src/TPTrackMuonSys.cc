@@ -1251,7 +1251,7 @@ TPTrackMuonSys::analyze(const edm::Event& event, const edm::EventSetup& setup){
 
       Bool_t gotMass =  false;
 
-      if ( m_saveZ and invMass > 75. ) gotMass =  true; 
+      if ( m_saveZ and (invMass > 75. &&  invMass < 120.) ) gotMass =  true; 
       if ( m_saveJPsi and (invMass > 2.5 &&  invMass < 3.6) ) gotMass =  true; 
       if(!gotMass)continue;
 
