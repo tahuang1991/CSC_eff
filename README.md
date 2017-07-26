@@ -41,7 +41,7 @@ saveJPsi         = cms.untracked.bool(False),
 
 2. Run [Run_2017_92X_dataRun2_July6ReReco_PixelCommissioning_v2_condor.py](CSCEfficiency/Run_2017_92X_dataRun2_July6ReReco_PixelCommissioning_v2_condor.py) using condor:
 <pre>
-farmoutAnalysisJobs  --input-files-per-job=1  --skip-existing-output CSCeff_job $CMSSW_BASE $CMSSW_BASE/src/CSCEfficiency/recoOnlyRun2017B_92X_dataRun2_Prompt_v4_condor.py --input-file-list=$CMSSW_BASE/src/CSCEfficiency/input_RAWfiles 'inputFiles=$inputFileNames' 'outputFile=$outputFileName' --assume-input-files-exist --vsize-limit=7000
+farmoutAnalysisJobs  --input-files-per-job=1  --skip-existing-output CSCeff_job $CMSSW_BASE $CMSSW_BASE/src/CSCEfficiency/recoOnlyRun2017B_92X_dataRun2_Prompt_v4_condor.py --input-file-list=$CMSSW_BASE/src/CSCEfficiency/output_RAW_files_Jun26_1file 'inputFiles=$inputFileNames' 'outputFile=$outputFileName' --assume-input-files-exist --vsize-limit=7000
 </pre>
 
 or locally [Run_2017_test2_PixComm_local.py](CSCEfficiency/Run_2017_test2_PixComm_local.py):
