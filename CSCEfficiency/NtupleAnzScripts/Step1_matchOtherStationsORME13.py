@@ -17,7 +17,17 @@ DenominatorRequire_ExtraStation1="( ( (CSCDxyTTSeg#1<5. || CSCDxyTTSeg#1<5*CSCDx
 if len(args)<1:
   print "Usage: python Step1.py haddedrootfile.root (Classify the Ntuple file and do the tagandprobe fit)"
   sys.exit()
-
+if len(args)>1:
+  TagProbeFitResult=args[1]+"/TnP_"+dir_+"_"
+  TemporaryOutputFile=args[1]+"/Tmp_"+dir_+".root"
+  if not os.path.exists(args[1]):
+    os.makedirs(args[1])
+  print "output dir: ",args[1]
+if len(args)>2:
+  if args[2]=="LCT":
+    DenominatorRequire+="&& !trackVeto_isClosestToLCT"
+    print "calculating LCT eff -> add trackVeto_isClosestToLCT requirement in the denominator"
+    
 def CalculateOverallScaleNum(tree_):
   overall=0.
   for n in range(tree_.GetEntries()):
