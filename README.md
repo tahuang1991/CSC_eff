@@ -110,6 +110,11 @@ hadd Ntuple.root CSCPFG_Ineff_DATA*.root
    <pre> cd NtupleAnzScripts
    python Step1_matchOtherStationsORME13.py Ntuple.root 
    </pre>
+   The command above will run the efficiency calculation for the segment efficiecny measurement. For LCT efficiency additional requiremnet is used for the probe: there should be no other tracker track that is closer to LCT. So to run efficiency calculation for the LCT efficiecny measurement run like:
+   <pre> cd NtupleAnzScripts
+   python Step1_matchOtherStationsORME13.py Ntuple.root LCT
+   </pre>
+   
 3. Wait until all jobs finished. Use `ps -f` to check.
 4. Make the plot:
    <pre>
