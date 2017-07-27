@@ -120,6 +120,10 @@ hadd Ntuple.root CSCPFG_Ineff_DATA*.root
    <pre>
    python Step2_PlotAll_pallete.py input_dir 
    </pre>
+   Plots are in the result root file resultplots_NtupleAnzScripts.root.
+5. Read plots from root file and produce nice plots for stations 1,2,3 and 4 and another plot for stations 12+13,11A,11B:
+   python plotAllEff_afterStep2.py output_plot_name
+   
    Advanced Usage of [Step2_PlotAll.py](NtupleAnzScripts/Step2_PlotAll.py):
    <pre> python Step2_PlotAll.py arg1 arg2 </pre>
    * arg1 is the name of the directory that stores the TagandProbe result files;
@@ -128,7 +132,6 @@ hadd Ntuple.root CSCPFG_Ineff_DATA*.root
    * Example2(for systematic -- bkg modeling): python Step2_PlotAll.py . bkg
    * Example3(for systematic -- sig modeling): python Step2_PlotAll.py . sig
    * Example4(MCTruth): python Step2_PlotAll.py ~/home/xxxxx/ mc
-5. Plots are in the result root file
 
 ## Organize the Result Plots
 To combine the data and MC results into one plot, one can use [DATAMCPlot.py](NtupleAnzScripts/DATAMCPlot.py). It oragnizes the plots made by [Step2_PlotAll.py](NtupleAnzScripts/Step2_PlotAll.py). The usage is
