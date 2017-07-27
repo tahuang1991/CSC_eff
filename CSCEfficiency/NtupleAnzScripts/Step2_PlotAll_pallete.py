@@ -110,7 +110,7 @@ cms_label = ROOT.TPaveText(0.06, 0.84, 0.9, 1.0, "NDC")
 unshitify(cms_label)
 cms_label.SetTextSize(0.03)
 cms_label.SetTextAlign(12)
-cms_label.AddText("CMS Preliminary                                                  #sqrt{s}=13 TeV,  2016B")
+cms_label.AddText("CMS Preliminary                                                  #sqrt{s}=13 TeV,  2017B")
 
 
 # by Nick:
@@ -190,13 +190,16 @@ phischeme="shiftedphi"
 #phischeme="tracks_phi"
 if "pt" in Group:
     binning="pt"
-    plotname="tracks_pt_PLOT_"+etascheme+"_bin0_&_"+phischeme+"_bin0"
+    plotname="tracks_pt_PLOT"
 elif "eta" in Group:
     binning="eta"
-    plotname=etascheme+"_PLOT_"+phischeme+"_bin0_&_tracks_pt_bin0"
+    plotname=etascheme+"_PLOT"
 elif "phi" in Group:
     binning="phi"
-    plotname=phischeme+"_PLOT_"+etascheme+"_bin0_&_tracks_pt_bin0"
+    plotname=phischeme+"_PLOT"
+elif "PV" in Group:
+    binning="PV"
+    plotname="numberOfPrimaryVertices_PLOT"
 else:
     plotname=phischeme+"_bin0__"+etascheme+"_bin0__tracks_pt_bin0__VoigtianPlusExpo"
 
@@ -242,7 +245,12 @@ def GetBinnedEffPlot(f_in,path="lct_effV",effcat="fit_eff",st_=0,name_=plotname)
         ikey=list_.First()
         while (ikey!=list_.After(list_.Last())):
             dirname_=ikey.GetName()
-            binnumber=re.match(".*"+binning+"_bin(\d*)_.*",dirname_)
+#            binnumber=re.match(".*"+binning+"_bin(\d*)_.*",dirname_)
+            if "PV" in Group:
+              binnumber=re.match(".*"+"numberOfPrimaryVertices"+"_bin(\d*)_.*",dirname_)
+            else:
+              binnumber=re.match(".*"+binning+"_bin(\d*)_.*",dirname_)
+
             if binnumber:
                 ibin=int(binnumber.group(1))-firstbin
                 if ibin<nbins and ibin>=0:
@@ -298,7 +306,7 @@ if "Stations" in Group:
             continue
         f_in=TFile(filename_,"READ");
         categoryname="cnt_eff" if Postfix=="_MCTruth" else "fit_eff"
-        if "pt" in Group or "eta" in Group or "phi" in Group:
+        if "pt" in Group or "eta" in Group or "phi" in Group or "PV" in Group:
             LCTEff=GetBinnedEffPlot(f_in, "lct_effV"+Postfix,categoryname,stations[idx][3])
             SEGEff=GetBinnedEffPlot(f_in, "seg_effV"+Postfix,categoryname,stations[idx][3])
             file_out.cd()
@@ -309,7 +317,7 @@ if "Stations" in Group:
         else:
             Effs.append( GetEff(f_in, "lct_effV"+Postfix,categoryname)+GetEff(f_in,"seg_effV"+Postfix,categoryname) )
             f_in.Close()
-    if not ("pt" in Group or "eta" in Group or "phi" in Group):
+    if not ("pt" in Group or "PV" in Group or "eta" in Group or "phi" in Group):
         Effs=array(Effs).transpose()*100.
         xval=array(range(1,n_stations+1))*1.0
         xerr=zeros(n_stations, dtype=float)
@@ -451,7 +459,7 @@ elif "Chambers" in Group:
     LCTEff.Write()
     LCTEff_upErr.Write()
     LCTEff_downErr.Write()
-elif "pt" in Group or "eta" in Group or "phi" in Group:
+elif "pt" in Group or "PV" in Group or "eta" in Group or "phi" in Group:
     filename_=Prefix+TagProbeFitResult+"AllStations.root"
     print "pt/eta/phi eff reading file: ",f_in
     if not os.path.isfile(filename_):
