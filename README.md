@@ -115,7 +115,10 @@ hadd Ntuple.root CSCPFG_Ineff_DATA*.root
    python Step1_matchOtherStationsORME13.py Ntuple.root LCT
    </pre>
    
-3. Wait until all jobs finished. Use `ps -f` to check. Make sure you have output files called TnP_NtupleAnzScripts_bla.root for all your stations/chambers. 
+3. Wait until all jobs finished. Use `ps -f` to check. Make sure you have output files called TnP_NtupleAnzScripts_bla.root for all your stations/chambers. If any file is missing you can rerun the TnP fit. Example for ME11: 
+<pre>
+cmsRun TagandProbe.py Tmp_NtupleAnzScriptsME11.root 1
+</pre>
 4. Make the plot:
    <pre>
    python Step2_PlotAll_pallete.py input_dir 
