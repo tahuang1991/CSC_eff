@@ -115,14 +115,16 @@ hadd Ntuple.root CSCPFG_Ineff_DATA*.root
    python Step1_matchOtherStationsORME13.py Ntuple.root LCT
    </pre>
    
-3. Wait until all jobs finished. Use `ps -f` to check.
+3. Wait until all jobs finished. Use `ps -f` to check. Make sure you have output files called TnP_NtupleAnzScripts_bla.root for all your stations/chambers. 
 4. Make the plot:
    <pre>
    python Step2_PlotAll_pallete.py input_dir 
    </pre>
    Plots are in the result root file resultplots_NtupleAnzScripts.root.
 5. Read plots from root file and produce nice plots for stations 1,2,3 and 4 and another plot for stations 12+13,11A,11B:
+   <pre>
    python plotAllEff_afterStep2.py output_plot_name
+   </pre>
    
    Advanced Usage of [Step2_PlotAll.py](NtupleAnzScripts/Step2_PlotAll.py):
    <pre> python Step2_PlotAll.py arg1 arg2 </pre>
