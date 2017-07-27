@@ -129,6 +129,7 @@ cmsRun TagandProbe.py Tmp_NtupleAnzScriptsME11.root 1
    python plotAllEff_afterStep2.py output_plot_name
    </pre>
    
+   <!--
    Advanced Usage of [Step2_PlotAll.py](NtupleAnzScripts/Step2_PlotAll.py):
    <pre> python Step2_PlotAll.py arg1 arg2 </pre>
    * arg1 is the name of the directory that stores the TagandProbe result files;
@@ -148,6 +149,7 @@ python DATAMCPlot.py datafile mcfile plotname
 * plotname is the name of the plot saved in the result root file, e.g. "ME12+13seg_effV" for segment efficiency or "ME12+13lct_effV" for lct efficiency.
 
 I suggest to put the datafile and the mcfile in different directories. This script will use the  [Config.py](NtupleAnzScripts/Config.py) in the datafile directory. If no Config.py or no \__init\__.py is found in the datafile directory, it will use the Config.py in the current directory.
+-->
 
 ## Study the Variables in the Ntuple
 This part is only for **experts** who want to find out a problem or know more. Here only list a breif discription for each script because **experts** are able to read the python script themselves. With the following python scipts, one can study the variables and their correlations in the Ntuple, e.g., the distance between the track and the LCT/segment.
