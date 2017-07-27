@@ -73,9 +73,9 @@ hadd Ntuple.root CSCPFG_Ineff_DATA*.root
     <tr>
       <th> Group </th><th> x axis </th><th>y axis</th><th>z axis</th><th> Comments</th>
     </tr>
-    <tr>
+    <!--<tr>
       <td>"Stations"</td><td>stations</td><td>efficiency</td><td></td>
-    </tr>
+    </tr>-->
     <tr>
       <td>"Chambers"</td><td>chamber number</td><td>rings</td><td>efficiency</td>
     </tr>
@@ -91,9 +91,9 @@ hadd Ntuple.root CSCPFG_Ineff_DATA*.root
     <tr>
       <td>"StationsPV"</td><td>NPU</td><td>efficiency</td><td></td><td>make a plot for each station</td>
     </tr>
-    <tr>
+    <!--<tr>
       <td>"pt","eta", or "phi"</td><td>pt,|η|,ϕ</td><td>efficiency</td><td></td><td>make one plot for all stations, not tested yet</td>
-    </tr>
+    </tr>-->
    </table> 
    4. Arrange space for the temporary file (you may change the path but not the file name): 
       It may take two times the size of the Ntuple file space. The variable is `TemporaryOutputFile`. By default, it will use the linux         temporary path: /tmp/.
