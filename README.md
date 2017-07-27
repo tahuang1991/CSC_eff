@@ -108,11 +108,11 @@ hadd Ntuple.root CSCPFG_Ineff_DATA*.root
    </pre>
 2. Categorize the data and run the tag-and-probe package in CMSSW:
    <pre> cd NtupleAnzScripts
-   python Step1_matchOtherStationsORME13.py Ntuple.root 
+   python Step1_matchOtherStationsORME13.py Ntuple.root output_dir
    </pre>
    The command above will run the efficiency calculation for the segment efficiecny measurement. For LCT efficiency additional requiremnet is used for the probe: there should be no other tracker track that is closer to LCT. So to run efficiency calculation for the LCT efficiecny measurement run like:
    <pre> cd NtupleAnzScripts
-   python Step1_matchOtherStationsORME13.py Ntuple.root LCT
+   python Step1_matchOtherStationsORME13.py Ntuple.root output_dir LCT
    </pre>
    
 3. Wait until all jobs finished. Use `ps -f` to check. Make sure you have output files called TnP_NtupleAnzScripts_bla.root for all your stations/chambers. If any file is missing you can rerun the TnP fit. Example for ME11: 
