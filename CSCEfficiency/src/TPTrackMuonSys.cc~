@@ -1251,23 +1251,8 @@ TPTrackMuonSys::analyze(const edm::Event& event, const edm::EventSetup& setup){
 
       Bool_t gotMass =  false;
 
-      //      if ( m_saveZ and (invMass > 75. &&  invMass < 120.) ) gotMass =  true; 
-      //      if ( m_saveJPsi and (invMass > 2.5 &&  invMass < 3.6) ) gotMass =  true; 
-
-      if ( m_saveZ and 
-	   (
-	    invMass > 75. &&  invMass < 120. 
-	    && tracks_e > 8.
-	    && MuTagIsoR03Ratio < 0.4 // tight Iso: Only tracks from the leading PV in the event
-	    && MuTagPFIsoR04Ratio < 0.15 // tight Iso: Only tracks from the leading PV in the event
-	    && tracks_IsoR03Ratio < 0.4
-	    ) 
-	   ) 
-	gotMass =  true; 
-      
-      if ( m_saveJPsi and (invMass > 2.5 &&  invMass < 3.6) ) 
-	gotMass =  true; 
-
+      if ( m_saveZ and (invMass > 75. &&  invMass < 120.) ) gotMass =  true; 
+      if ( m_saveJPsi and (invMass > 2.5 &&  invMass < 3.6) ) gotMass =  true; 
       if(!gotMass)continue;
 
 
