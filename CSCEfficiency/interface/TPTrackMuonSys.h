@@ -87,6 +87,8 @@
 //Track-detector associator
 #include "TrackingTools/TrackAssociator/interface/TrackDetectorAssociator.h"
 
+#include "TrackingTools/TrackAssociator/interface/TrackAssociatorParameters.h"
+
 // Vertices...
 #include "DataFormats/VertexReco/interface/Vertex.h"
 #include "DataFormats/VertexReco/interface/VertexFwd.h"
@@ -107,7 +109,7 @@
 #include "SimDataFormats/TrackingAnalysis/interface/TrackingVertexContainer.h"
 #include "DataFormats/RecoCandidate/interface/TrackAssociation.h"
 #include "SimTracker/Records/interface/TrackAssociatorRecord.h"
-//#include "SimTracker/TrackAssociation/interface/TrackAssociatorBase.h" 
+//#include "SimTracker/TrackAssociation/interface/TrackAssociatorBase.h"     
 #include "SimMuon/MCTruth/interface/MuonAssociatorByHits.h"
 //SimTracks
 #include "SimDataFormats/Track/interface/SimTrackContainer.h"
@@ -303,7 +305,7 @@ class TPTrackMuonSys : public edm::EDAnalyzer {
   // Extrapolator to cylinder
   edm::ESHandle<Propagator> propagatorAlong;
   edm::ESHandle<Propagator> propagatorOpposite;
-  edm::ParameterSet trackExtractorPSet_;
+  //  edm::ParameterSet trackExtractorPSet_;
   // counters
   Int_t nEventsAnalyzed,nEventsObjects,nEventsTracks,nEventsMuons,nEventsMuons_ok,nEventsMuons_ok2,nEventsMuons_ok3,nEventsMuons_okgood,nEventsMuonsTracks;
   Int_t treeCount;
@@ -319,6 +321,7 @@ class TPTrackMuonSys : public edm::EDAnalyzer {
   // General input parameters
   //
   std::string m_rootFileName, m_refRootFile, m_hltSingleMuTriName, m_hltDoubleMuTriName;
+  //  std::string trackExtractorName;
   double m_cellThreshold;
   // Steering parameters...
   edm::InputTag m_beamSpot;
@@ -351,6 +354,7 @@ class TPTrackMuonSys : public edm::EDAnalyzer {
   edm::EDGetTokenT<reco::MuonCollection>          muons_token;
   std::string m_muons;
 
+  reco::isodeposit::IsoDepositExtractor* muIsoExtractorTrack_;
 
   Bool_t m_isMC, m_doTrigger, m_doTrack, m_doMuon, m_doElectron, m_doEIDAndIso, m_doPhoton, m_doGenPart;
   Bool_t m_saveZ,m_saveJPsi;
@@ -408,8 +412,8 @@ class TPTrackMuonSys : public edm::EDAnalyzer {
   Bool_t tracktruth_isPileup;
   ULong64_t tracktruth_type;
   Int_t tracktruth_thesamewith;
-  //  TrackAssociatorParameters parameters_;
   TrackDetectorAssociator trackAssociator_;
+  TrackAssociatorParameters parameters_;
 
   // Tracks
   Int_t tracks_algo, tracks_charge, tracks_numberOfValidHits, tracks_algN, tracks_numberOfLostHits, tracks_recHitsSize;
@@ -446,7 +450,7 @@ class TPTrackMuonSys : public edm::EDAnalyzer {
   Int_t MuTagHitsMuSys, MuTagHitsTrkSys;
   Float_t MuTagE, MuProbeE;
   Float_t MuTagPhiProj1, MuTagEtaProj1, MuTagPhiProj2, MuTagEtaProj2;
-  Float_t MuTagIsoR03Ratio,MuTagIsoR05Ratio;//ratio of muon pT
+  Float_t MuTagIsoR03Ratio,MuTagIsoR05Ratio,MuTagPFIsoR04Ratio;//ratio of muon pT
   Float_t MuTagtracktruth_pt, MuTagtracktruth_p, MuTagtracktruth_id;
   Bool_t MuTagtracktruth_isPileup;
   ULong64_t MuTagtracktruth_type;

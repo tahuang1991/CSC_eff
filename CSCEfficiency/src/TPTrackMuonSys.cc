@@ -116,10 +116,32 @@ vtxsrc_= pSet_.getUntrackedParameter<std::string>("vtxsrc","offlinePrimaryVertic
   //  edm::ParameterSet parameters = Conf.getParameter<edm::ParameterSet>("TrackAssociatorParameters");
   //  edm::ConsumesCollector iC = consumesCollector();
 
+  /*
   trackExtractorPSet_ = Conf.getParameter<edm::ParameterSet>("TrackExtractor");
   //  parameters_.loadParameters( parameters );
   //  parameters_.loadParameters( parameters, iC );
   trackAssociator_.useDefaultPropagator();
+  */
+
+  /*
+  edm::ParameterSet parameters = Conf.getParameter<edm::ParameterSet>("TrackAssociatorParameters");
+  edm::ConsumesCollector iC = consumesCollector();
+  parameters_.loadParameters( parameters, iC );
+
+  edm::ParameterSet trackExtractorPSet_ = Conf.getParameter<edm::ParameterSet>("TrackExtractor");
+  //  parameters_.loadParameters( parameters );
+  trackAssociator_.useDefaultPropagator();
+  */
+  
+  const edm::ParameterSet parameters = Conf.getParameter<edm::ParameterSet>("TrackAssociatorParameters");
+  //    const edm::ParameterSet parameters = Conf.getParameter<edm::ParameterSet>("TrackAssociatorParameterBlock");
+    edm::ConsumesCollector iC = consumesCollector();
+    parameters_.loadParameters( parameters, iC );
+    
+    edm::ParameterSet trackExtractorPSet_ = Conf.getParameter<edm::ParameterSet>("TrackExtractor");
+    std::string trackExtractorName = trackExtractorPSet_.getParameter<std::string>("ComponentName");
+    muIsoExtractorTrack_ = IsoDepositExtractorFactory::get()->create( trackExtractorName, trackExtractorPSet_,consumesCollector());
+  
 
   ///  Now the MC specific information... if available...
   //
@@ -127,6 +149,9 @@ vtxsrc_= pSet_.getUntrackedParameter<std::string>("vtxsrc","offlinePrimaryVertic
   m_saveZ     = Conf.getUntrackedParameter<bool>("saveZ");
   m_saveJPsi     = Conf.getUntrackedParameter<bool>("saveJPsi");
   m_mcTag = Conf.getUntrackedParameter<edm::InputTag>("mcTag"); //
+
+  //  trackExtractorName = trackExtractorPSet_.getParameter<std::string>("ComponentName");
+
  
   // flags to switch on/off individual modules 
   // set counters to zero
@@ -228,6 +253,7 @@ vtxsrc_= pSet_.getUntrackedParameter<std::string>("vtxsrc","offlinePrimaryVertic
   fractNtuple->Branch("MuTagPhi",        &MuTagPhi,        "MuTagPhi/F") ;
   fractNtuple->Branch("MuTagIsoR03Ratio",        &MuTagIsoR03Ratio,        "MuTagIsoR03Ratio/F") ;
   fractNtuple->Branch("MuTagIsoR05Ratio",        &MuTagIsoR05Ratio,        "MuTagIsoR05Ratio/F") ;
+  fractNtuple->Branch("MuTagPFIsoR04Ratio",        &MuTagPFIsoR04Ratio,        "MuTagPFIsoR04Ratio/F") ;
   fractNtuple->Branch("MuTagPromt",      &MuTagPromt,      "MuTagPromt/I");
   fractNtuple->Branch("MuTagnSegTrkArb", &MuTagnSegTrkArb, "MuTagnSegTrkArb/I");
   fractNtuple->Branch("MuTagCaloL",      &MuTagCaloL,      "MuTagCaloL/O") ;
@@ -386,7 +412,7 @@ void
 TPTrackMuonSys::analyze(const edm::Event& event, const edm::EventSetup& setup){
   //cout << "HERE *************************" << endl;
 
- // cout <<"\t\t ************************>>>>>>>>>>>   TPTrackMuonSys::analyze..."<<endl;
+  //cout <<"\t\t TPTrackMuonSys::analyze..."<<endl;
 
   nEventsAnalyzed++;
   Nevents_all=nEventsAnalyzed;
@@ -911,22 +937,35 @@ TPTrackMuonSys::analyze(const edm::Event& event, const edm::EventSetup& setup){
     }//end of track loop
   }//end of if CSC track
 
-  std::string trackExtractorName = trackExtractorPSet_.getParameter<std::string>("ComponentName");
+  
+  //  std::string trackExtractorName = trackExtractorPSet_.getParameter<std::string>("ComponentName");
 // had to comment out because of segmentation violation
 //  reco::isodeposit::IsoDepositExtractor* muIsoExtractorTrack_ = IsoDepositExtractorFactory::get()->create( trackExtractorName, trackExtractorPSet_, consumesCollector());
+  
+//  reco::isodeposit::IsoDepositExtractor* muIsoExtractorTrack_;
+//  muIsoExtractorTrack_ = IsoDepositExtractorFactory::get()->create( trackExtractorName, trackExtractorPSet_,consumesCollector());
+
+  //  edm::ParameterSet trackExtractorPSet = iConfig.getParameter<edm::ParameterSet>("TrackExtractorPSet");
+  //  std::string trackExtractorName = trackExtractorPSet.getParameter<std::string>("ComponentName");       
+
    //cout <<" muon begin" << endl;
+   
 
   if (muons->size()>0){
     nEventsMuons++;
     Nevents_muons=nEventsMuons;
   }
 
+  //  std::string trackExtractorName = trackExtractorPSet_.getParameter<std::string>("ComponentName");
+  //  muIsoExtractorTrack_ = IsoDepositExtractorFactory::get()->create( trackExtractorName, trackExtractorPSet_,consumesCollector());
+
+
   for (reco::MuonCollection::const_iterator muIter1 = muons->begin(); muIter1 != muons->end(); ++muIter1) {  
 //cout <<"   muon... " << endl;
 
 
     if (!muIter1->isTrackerMuon() ) continue;
-    if(!muIter1->track().isNonnull()) continue;
+    if (!muIter1->track().isNonnull()) continue;
 
     if (event_number_muon != event.id().event()){
       nEventsMuons_ok++;
@@ -1033,8 +1072,19 @@ TPTrackMuonSys::analyze(const edm::Event& event, const edm::EventSetup& setup){
 	}//end of loop ki
       }//end of loop ia
     }//end of if m_GotTrgObj
+    //    MuTagIsoR03Ratio = -999.;
+    //    MuTagIsoR05Ratio = -999.;
+
     MuTagIsoR03Ratio = MuTagPt>0?muIter1->isolationR03().sumPt/MuTagPt:9999.;
     MuTagIsoR05Ratio = MuTagPt>0?muIter1->isolationR05().sumPt/MuTagPt:9999.;
+
+    MuTagPFIsoR04Ratio = MuTagPt>0?(muIter1->pfIsolationR04().sumChargedHadronPt + max(0., muIter1->pfIsolationR04().sumNeutralHadronEt + muIter1->pfIsolationR04().sumPhotonEt - 0.5*muIter1->pfIsolationR04().sumPUPt))/MuTagPt:9999.;
+
+    //    cout << "#############  mu tag iso: "<<MuTagIsoR03Ratio<<", "<<MuTagIsoR05Ratio<<", "<<MuTagPFIsoR04Ratio <<  endl;
+
+    //muIter1->isolationR03().sumPt/muIter1->pt()
+    //(muIter1->pfIsolationR04().sumChargedHadronPt + max(0., muIter1->pfIsolationR04().sumNeutralHadronEt + muIter1->pfIsolationR04().sumPhotonEt - 0.5*muIter1->pfIsolationR04().sumPUPt))/muIter1->pt()
+
     MuTagCaloL= muon::isGoodMuon(*muIter1,muon::TM2DCompatibilityLoose);
     MuTagCaloT= muon::isGoodMuon(*muIter1,muon::TM2DCompatibilityTight);
      
@@ -1177,11 +1227,15 @@ TPTrackMuonSys::analyze(const edm::Event& event, const edm::EventSetup& setup){
       tracks_vx     = itTrack->vx();  // x coordinate of the reference point on track
       tracks_vy     = itTrack->vy();  // y coordinate of the reference point on track
       tracks_vz     = itTrack->vz();  // z coordinate of the reference point on track
-      /*
+      
+      //      reco::isodeposit::IsoDepositExtractor* muIsoExtractorTrack_ = IsoDepositExtractorFactory::get()->create( trackExtractorName, trackExtractorPSet_, consumesCollector());         
       reco::IsoDeposit depTrk = muIsoExtractorTrack_->deposit(event, setup, *itTrack );
+      // sumPt:
       tracks_IsoR03Ratio = tracks_pt>0?depTrk.depositWithin(0.3)/tracks_pt:9999.;
       tracks_IsoR05Ratio = tracks_pt>0?depTrk.depositWithin(0.5)/tracks_pt:9999.;
-      */
+      //      cout <<"############### tracks_IsoR03Ratio = "<<tracks_IsoR03Ratio<< ", "<< tracks_IsoR05Ratio<< endl;
+      
+    
       tracks_qoverp = itTrack->qoverp(); // q/p 
       tracks_lambda = itTrack->lambda();
       tracks_recHitsSize= itTrack->recHitsSize();
@@ -1233,6 +1287,11 @@ TPTrackMuonSys::analyze(const edm::Event& event, const edm::EventSetup& setup){
 */
       if(!trQuality)continue;
 
+      /*
+      Bool_t trIso = (tracks_IsoR03Ratio<0.1);
+      if(!trIso)continue;
+      */
+
       Float_t mMu = 0.1134289256;
       invMass = pow( ( sqrt(pow(itTrack->p(),2)+ mMu*mMu) +  sqrt(pow(muIter1->track()->p(),2)+ mMu*mMu) ) ,2 ) -
 	(
@@ -1252,13 +1311,14 @@ TPTrackMuonSys::analyze(const edm::Event& event, const edm::EventSetup& setup){
       Bool_t gotMass =  false;
 
       //      if ( m_saveZ and (invMass > 75. &&  invMass < 120.) ) gotMass =  true; 
-      //      if ( m_saveJPsi and (invMass > 2.5 &&  invMass < 3.6) ) gotMass =  true; 
 
       if ( m_saveZ and 
 	   (
 	    invMass > 75. &&  invMass < 120. 
 	    && tracks_e > 8.
+	    //	    && MuTagIsoR03Ratio > 0.0
 	    && MuTagIsoR03Ratio < 0.4 // tight Iso: Only tracks from the leading PV in the event
+	    //	    && MuTagPFIsoR04Ratio > 0.0
 	    && MuTagPFIsoR04Ratio < 0.15 // tight Iso: Only tracks from the leading PV in the event
 	    && tracks_IsoR03Ratio < 0.4
 	    ) 
