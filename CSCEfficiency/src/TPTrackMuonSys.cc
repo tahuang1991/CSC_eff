@@ -26,6 +26,7 @@ TPTrackMuonSys::TPTrackMuonSys(const edm::ParameterSet& Conf) : theDbConditions(
   //now do what ever initialization is needed
   m_rootFileName         = Conf.getUntrackedParameter<std::string>("rootFileName","PhyTree.root");
 
+  std::cout <<"IDB: Test"<<std::endl;
   //  cout <<"\t\t TPTrackMuonSys::TPTrackMuonSys..."<<endl;
 
   ///////////////////////////////
@@ -411,6 +412,8 @@ TPTrackMuonSys::~TPTrackMuonSys(){
 void 
 TPTrackMuonSys::analyze(const edm::Event& event, const edm::EventSetup& setup){
   //cout << "HERE *************************" << endl;
+
+  std::cout <<"IDB: TPTrackMuonSys::analyze..."<<std::endl;
 
   //cout <<"\t\t TPTrackMuonSys::analyze..."<<endl;
 
@@ -802,7 +805,7 @@ TPTrackMuonSys::analyze(const edm::Event& event, const edm::EventSetup& setup){
 	  size_t p = fullname.find_first_of(':');
 	  if ( p != std::string::npos) name = fullname.substr(0, p);
 	  else name = fullname;
-	  if ( &toc !=0 ) {
+	  if ( toc.size() !=0 ) {
 	    HLTMuAcceptance->assign(m_HLTMuTrgBit.size(),false);
 	    for (vector<string>::const_iterator iter=HLTMuObjModuleNames->begin(); iter<HLTMuObjModuleNames->end();iter++ )
 	      if ( name == *iter ) HLTMuAcceptance->at( iter-HLTMuObjModuleNames->begin() )=true;
@@ -1043,7 +1046,7 @@ TPTrackMuonSys::analyze(const edm::Event& event, const edm::EventSetup& setup){
 	size_t p = fullname.find_first_of(':');
 	if ( p != std::string::npos) name = fullname.substr(0, p);
 	else name = fullname;
-	if ( &toc ==0) continue;
+	if ( toc.size() ==0) continue;
 	const trigger::Keys & k = handleTriggerEvent->filterKeys(ia);
 	for (trigger::Keys::const_iterator ki = k.begin(); ki !=k.end(); ++ki ) {
 	  double l3phi  = toc[*ki].phi();

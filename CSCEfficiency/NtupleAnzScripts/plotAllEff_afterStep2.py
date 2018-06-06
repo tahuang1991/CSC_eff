@@ -39,7 +39,8 @@ cms_label = ROOT.TPaveText(0.15, 0.95, 0.9, 1.0, "NDC")
 unshitify(cms_label)
 cms_label.SetTextSize(0.03)
 cms_label.SetTextAlign(12)
-cms_label.AddText("CMS Preliminary 2017                       #sqrt{s}=13 TeV");
+#cms_label.AddText("CMS Preliminary 2018                       #sqrt{s}=13 TeV");
+cms_label.AddText("CMS Preliminary 2018                       cosmics");
 
 dir=""
 
