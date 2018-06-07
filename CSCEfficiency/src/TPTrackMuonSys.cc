@@ -25,7 +25,6 @@
 TPTrackMuonSys::TPTrackMuonSys(const edm::ParameterSet& Conf) : theDbConditions( Conf ) {
   //now do what ever initialization is needed
   m_rootFileName         = Conf.getUntrackedParameter<std::string>("rootFileName","PhyTree.root");
-
   std::cout <<"IDB: Test"<<std::endl;
   //  cout <<"\t\t TPTrackMuonSys::TPTrackMuonSys..."<<endl;
 
@@ -197,8 +196,10 @@ vtxsrc_= pSet_.getUntrackedParameter<std::string>("vtxsrc","offlinePrimaryVertic
   // ------------------------------
   // --- Summary ntuple booking ---
   // ------------------------------
+  edm::Service<TFileService> fs ;
 
-  Nevents        = new TTree("Nevents","/Nevents");
+//   Nevents        = new TTree("Nevents","/Nevents");
+  Nevents        = fs->make <TTree>("Nevents","/Nevents");
   Nevents        ->Branch("Nevents_all",      &Nevents_all, "Nevents_all/I") ;
   Nevents        ->Branch("Nevents_objects",      &Nevents_objects, "Nevents_objects/I") ;
   Nevents        ->Branch("Nevents_tracks",      &Nevents_tracks, "Nevents_tracks/I") ;
@@ -209,7 +210,8 @@ vtxsrc_= pSet_.getUntrackedParameter<std::string>("vtxsrc","offlinePrimaryVertic
   Nevents        ->Branch("Nevents_muons_okgood",      &Nevents_muons_okgood, "Nevents_muons_okgood/I") ;
   Nevents        ->Branch("Nevents_muonstracks",      &Nevents_muonstracks, "Nevents_muonstracks/I") ;
 
-  fractNtuple         = new TTree("Fraction","/Fraction");
+//   fractNtuple         = new TTree("Fraction","/Fraction");
+  fractNtuple        = fs->make <TTree>("Fraction","/Fraction");
   fractNtuple->Branch("run_number",      &run_number, "run_number/I") ;
   fractNtuple->Branch("event_number",    &event_number, "event_number/I") ;
   fractNtuple->Branch("LumiBlock",       &LumiBlock,"LumiBlock/I") ;
@@ -391,7 +393,8 @@ vtxsrc_= pSet_.getUntrackedParameter<std::string>("vtxsrc","offlinePrimaryVertic
   fractNtuple->Branch("minDRHLTDiMu",     &minDRHLTDiMu,       "minDRHLTDiMu/F") ;
   fractNtuple->Branch("minDRHLTAllSingleMu",     &minDRHLTAllSingleMu,       "minDRHLTAllSingleMu/F") ;
 
-  RunInfo = new TTree("RunInfo","RunInfo");
+//   RunInfo = new TTree("RunInfo","RunInfo");
+  RunInfo = fs->make <TTree>("RunInfo","RunInfo");
   RunInfo->Branch("RunNumber",&run_number,"RunNum/i");
   RunInfo->Branch("TableName",&HLTTableName);
   HLTMuNames=new vector<string>();
@@ -1712,6 +1715,7 @@ TPTrackMuonSys::analyze(const edm::Event& event, const edm::EventSetup& setup){
 void TPTrackMuonSys::beginJob() {}
 // ------------ method called once each job just after ending the event loop  ------------
 void TPTrackMuonSys::endJob() {
+  edm::Service<TFileService> fs;
   theFile->Write();
   theFile->Close();
   std::cout<<"Events in "<<nEventsAnalyzed<<std::endl;
@@ -1768,12 +1772,18 @@ void TPTrackMuonSys::beginRun(const Run& r, const EventSetup& iSet)
   sprintf(plottitle,"Known BadChambers in Run %d; chamber number",run_number);
   /* Draw a badchamber plot and save it to the ntuple*/
   TH2F *TH2F_BadChambers=new TH2F(plotname,plottitle,36,1,37,18,-9,9);
+  edm::Service<TFileService> fs;
+  TH2F *BadChambers = fs->make<TH2F>(plotname,plottitle,36,1,37,18,-9,9);
   const char *chambers[36]  = {"01","02","03","04","05","06","07","08","09","10","11","12","13","14","15","16","17","18","19","20","21","22","23","24","25","26","27","28","29","30","31","32","33","34","35","36"};
   const char *rings[18] = {"ME-42","ME-41","ME-32","ME-31","ME-22","ME-21","ME-13","ME-12","ME-11","ME+11","ME+12","ME+13","ME+21","ME+22","ME+31","ME+32","ME+41","ME+42"};
-  for (UChar_t i=0;i<36;i++) 
+  for (UChar_t i=0;i<36;i++){
     TH2F_BadChambers->GetXaxis()->SetBinLabel(i+1,chambers[i]);
-  for (UChar_t i=0;i<18;i++)
+    BadChambers->GetXaxis()->SetBinLabel(i+1,chambers[i]);
+  }
+  for (UChar_t i=0;i<18;i++){
     TH2F_BadChambers->GetYaxis()->SetBinLabel(i+1,rings[i]);
+    BadChambers->GetYaxis()->SetBinLabel(i+1,rings[i]);
+  }
   for( Short_t indexc = 1; indexc<=540; ++indexc ) {// chamber indices are in range 1-468 (CSCs 2008) or 469-540 (ME42)
     CSCDetId id = CSCIndexer().detIdFromChamberIndex( indexc ); 
     if ( !badChambers_->isInBadChamber( id ) ) continue;
@@ -1817,6 +1827,7 @@ void TPTrackMuonSys::beginRun(const Run& r, const EventSetup& iSet)
       }
     if (id.endcap()==2) fillY*=-1;
     TH2F_BadChambers->Fill(id.chamber()+0.5,fillY);
+    BadChambers->Fill(id.chamber()+0.5,fillY);
 #ifdef jz_debug
     cerr<<(id.endcap()==1?"ME+":"ME-")<<Int_t(ring)<<"/"<<id.chamber()<<"("<<indexc<<")";
 #endif
@@ -1828,10 +1839,16 @@ void TPTrackMuonSys::beginRun(const Run& r, const EventSetup& iSet)
   TH2F_BadChambers->SetMaximum(0.8);
   TH2F_BadChambers->Draw("colz");
   TH2F_BadChambers->SetLabelSize(0.035,"X");
+  BadChambers->SetStats(0);
+  BadChambers->SetMinimum(0);
+  BadChambers->SetMaximum(0.8);
+  BadChambers->Draw("colz");
+  BadChambers->SetLabelSize(0.035,"X");
 #ifndef GetCSCHitsBefore500
   theFile->cd();
 #endif
   TH2F_BadChambers->Write();
+  BadChambers->Write();
   // BadChambersView->Write("BadChambersPlot");
   /* End of drawing the badchamber plot*/
 
