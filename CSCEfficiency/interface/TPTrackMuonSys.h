@@ -318,12 +318,12 @@ class TPTrackMuonSys : public edm::EDAnalyzer {
   //
   // The root file for the histograms.
   //
-  TFile *theFile;
+//   TFile *theFile;
 
   //
   // General input parameters
   //
-  std::string m_rootFileName, m_refRootFile, m_hltSingleMuTriName, m_hltDoubleMuTriName;
+  std::string m_refRootFile, m_hltSingleMuTriName, m_hltDoubleMuTriName;
   //  std::string trackExtractorName;
   double m_cellThreshold;
   // Steering parameters...

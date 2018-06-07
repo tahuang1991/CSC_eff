@@ -4,8 +4,8 @@
 # Source: /local/reps/CMSSW/CMSSW/Configuration/Applications/python/ConfigBuilder.py,v 
 # with command line options: RECO -s RAW2DIGI,L1Reco,RECO --runUnscheduled --nThreads 4 --data --era Run2_2017 --scenario pp --conditions 92X_dataRun2_Prompt_v4 --eventcontent RECO --datatier RECO --customise Configuration/DataProcessing/RecoTLR.customisePostEra_Run2_2017 --filein file:/hdfs/store/user/senka/CSC_2017data/1670035E-CD52-E711-AA85-02163E014522.root -n 100 --python_filename=recoOnlyRun2017B.py
 
-import sys
-input=sys.argv[2]
+#import sys
+#input=sys.argv[2]
 
 import FWCore.ParameterSet.Config as cms
 
@@ -33,8 +33,8 @@ process.maxEvents = cms.untracked.PSet(
 
 # Input source
 process.source = cms.Source("PoolSource",
-#    fileNames = cms.untracked.vstring('root://cms-xrd-global.cern.ch//store/data/Run2018A/SingleMuon/RAW-RECO/ZMu-PromptReco-v1/000/315/257/00000/2A55950E-524B-E811-9C89-FA163E679A44.root'),
-    fileNames = cms.untracked.vstring(input),
+   fileNames = cms.untracked.vstring('root://cms-xrd-global.cern.ch//store/data/Run2018A/SingleMuon/RAW-RECO/ZMu-PromptReco-v1/000/315/257/00000/2A55950E-524B-E811-9C89-FA163E679A44.root'),
+    #fileNames = cms.untracked.vstring(input),
     secondaryFileNames = cms.untracked.vstring()
 )
 
@@ -102,7 +102,7 @@ process.aodDump = cms.EDAnalyzer('TPTrackMuonSys',
                                  TrackAssociatorParameterBlock,
                                  MuonSegmentMatcher,
                                  TrackExtractor=cms.PSet(MIsoTrackExtractorBlock),
-                                 rootFileName   = cms.untracked.string('CSC_eff_test.root'),
+                                 #rootFileName   = cms.untracked.string('CSC_eff_test.root'),
                                  CSCUseTimingCorrections = cms.bool( True ),
                                  CSCUseGasGainCorrections = cms.bool( True ),
                                  isMC            = cms.untracked.bool(False),
