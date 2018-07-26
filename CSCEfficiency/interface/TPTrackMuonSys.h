@@ -276,7 +276,7 @@ class TPTrackMuonSys : public edm::EDAnalyzer {
 			    );
 */
   LocalPoint * matchTTwithLCTs(Float_t xPos, Float_t yPos, UChar_t ec, UChar_t st, UChar_t &rg, UChar_t cham, 
-			       edm::Handle<CSCCorrelatedLCTDigiCollection> mpclcts, Float_t &dRTrkLCT, Int_t &lctBX );
+			       edm::Handle<CSCCorrelatedLCTDigiCollection> mpclcts, Float_t &dRTrkLCT, CSCCorrelatedLCTDigi &matchedLCT);
 
   Int_t getNLayerMatchedCSCSeg(CSCSegmentCollection::const_iterator &cscSegMatch,
 			       edm::Handle<CSCRecHit2DCollection> recHits,
@@ -488,7 +488,7 @@ class TPTrackMuonSys : public edm::EDAnalyzer {
 
   /*LCT characteristics*/
   Float_t CSCLCTxLc[4],CSCLCTyLc[4];
-  Int_t CSCLCTbx[4];
+  Int_t CSCLCTbx[4], CSCLCTkeyStrip[4], CSCLCTkeyWG[4], CSCLCTmatchWin[4];
   Int_t N_seg_inChamber[4];
 
   /*Distance from the Extrapolated Tracks to LCT, 99999. for no LCT found*/

@@ -364,6 +364,9 @@ vtxsrc_= pSet_.getUntrackedParameter<std::string>("vtxsrc","offlinePrimaryVertic
     MakeBranchAllSt("CSCLCTxLc","F",CSCLCTxLc);
     MakeBranchAllSt("CSCLCTyLc","F",CSCLCTyLc);
     MakeBranchAllSt("CSCLCTbx","I",CSCLCTbx);
+    MakeBranchAllSt("CSCLCTkeyStrip","I",CSCLCTkeyStrip);
+    MakeBranchAllSt("CSCLCTkeyWG","I",CSCLCTkeyWG);
+    MakeBranchAllSt("CSCLCTmatchWin","I",CSCLCTmatchWin);
 
     MakeBranchAllSt("N_seg_inChamber","I",N_seg_inChamber);
 
@@ -927,9 +930,10 @@ TPTrackMuonSys::analyze(const edm::Event& event, const edm::EventSetup& setup){
 	LocalPoint localL3pCSC = Layer3Surface.toLocal(tsos.freeState()->position()); // problem!
 //	cout <<" \t\t ========> ... ok localpoint " << endl;
 	Float_t dRTrkLCT=9999.;
-	Int_t dummy_bx=0.;
+	//Int_t dummy_bx=0.;
+	CSCCorrelatedLCTDigi dummy_lct = CSCCorrelatedLCTDigi();
 //	cout <<"\t\t =======> LCTPos " << endl;
-	LocalPoint *LCTPos=matchTTwithLCTs( localL3pCSC.x(), localL3pCSC.y(), endcapCSC+1, stationCSC+1, ringCSC, chamberCSC+1, mpclcts, dRTrkLCT, dummy_bx);
+	LocalPoint *LCTPos=matchTTwithLCTs( localL3pCSC.x(), localL3pCSC.y(), endcapCSC+1, stationCSC+1, ringCSC, chamberCSC+1, mpclcts, dRTrkLCT, dummy_lct);
 	//	double CSCLCTStripNo=getStripLCTNo( localL3pCSC.x(), localL3pCSC.y(), endcapCSC+1, stationCSC+1, ringCSC, chamberCSC+1, mpclcts, dRTrkLCT, dummy_bx);
 //	cout <<"\t\t ========> ... ok LCTPos " << endl;
 	if (LCTPos!=NULL) {
@@ -1449,6 +1453,9 @@ TPTrackMuonSys::analyze(const edm::Event& event, const edm::EventSetup& setup){
 	CSCLCTxLc[j] = -9999.;
 	CSCLCTyLc[j] = -9999.;
 	CSCLCTbx[j] = -9999;
+	CSCLCTkeyStrip[j] = -9999;
+	CSCLCTkeyWG[j] = -9999;
+	CSCLCTmatchWin[j] = -9999;
 	N_seg_inChamber[j]=-9999;
 	/*Distance from the Extrapolated Tracks to LCT, 9999. for no LCT found*/
 //        for (int jj=0;jj<2;j++)
@@ -1622,12 +1629,19 @@ TPTrackMuonSys::analyze(const edm::Event& event, const edm::EventSetup& setup){
 	if (tsos.isValid()) {//start matching with LCTs
 //	  cout <<"test?" << endl;
 	  LocalPoint localL3pCSC = Layer3Surface.toLocal(tsos.freeState()->position());
+	  CSCCorrelatedLCTDigi matchedLCT = CSCCorrelatedLCTDigi();
 //	  cout <<" ok" << endl;
-	  LocalPoint *LCTPos=matchTTwithLCTs( localL3pCSC.x(), localL3pCSC.y(), CSCEndCapPlus?1:2, st+1, CSCRg[st], CSCChCand[st], mpclcts, CSCDxyTTLCT[st], CSCLCTbx[st]);
+	  LocalPoint *LCTPos=matchTTwithLCTs( localL3pCSC.x(), localL3pCSC.y(), CSCEndCapPlus?1:2, st+1, CSCRg[st], CSCChCand[st], mpclcts, CSCDxyTTLCT[st], matchedLCT);
 	  //	  double CSCLCTStripNo=getStripLCTNo( localL3pCSC.x(), localL3pCSC.y(), CSCEndCapPlus?1:2, st+1, CSCRg[st], CSCChCand[st], mpclcts, CSCDxyTTLCT[st], CSCLCTbx[st]);
-	  if (LCTPos!=NULL) {
+	  if (LCTPos!=NULL and matchedLCT.isValid()) {
+	    std::cout <<"found matched LCT "<< matchedLCT << std::endl;
 	    CSCLCTxLc[st]=LCTPos->x();
 	    CSCLCTyLc[st]=LCTPos->y();
+	    CSCLCTbx[st] = matchedLCT.getBX();
+	    CSCLCTmatchWin[st] = matchedLCT.getBX0();
+	    CSCLCTkeyStrip[st] = matchedLCT.getStrip();
+	    CSCLCTkeyWG[st] = matchedLCT.getKeyWG();
+
 	    CSCDxTTLCT[st]=CSCLCTxLc[st]-localL3pCSC.x();
 	    CSCDyTTLCT[st]=CSCLCTyLc[st]-localL3pCSC.y();
 	    LocalError localTTErr =tsos.localError().positionError();
@@ -2086,7 +2100,7 @@ Bool_t TPTrackMuonSys::matchTTwithRPCEChit(Bool_t trackDir,
 */
 //////////////  Get the matching with LCTs...
 LocalPoint * TPTrackMuonSys::matchTTwithLCTs(Float_t xPos, Float_t yPos, UChar_t ec, UChar_t st, UChar_t &rg, UChar_t cham, 
-					     edm::Handle<CSCCorrelatedLCTDigiCollection> mpclcts, Float_t &dRTrkLCT, Int_t &lctBX ) {
+					     edm::Handle<CSCCorrelatedLCTDigiCollection> mpclcts, Float_t &dRTrkLCT, CSCCorrelatedLCTDigi &matchedLCT ) {
   LocalPoint *interSect=NULL;
 
   //      printf("\ntrack: ME%d/%d, chamber %d, endcap %d \n",st,rg,cham, ec);
@@ -2178,10 +2192,11 @@ LocalPoint * TPTrackMuonSys::matchTTwithLCTs(Float_t xPos, Float_t yPos, UChar_t
 	  delete interSect;
 	  interSect=new LocalPoint(interSect_);
 	  dRTrkLCT =  DeltaR_ ;
-	  lctBX = (*mpcIt).getBX();
+	  //lctBX = (*mpcIt).getBX();
+	  matchedLCT = (*mpcIt);
 	  if (me11a) rg=4;
 	  else rg=id.ring();
-	  //cout << "1: BX = " << (*mpcIt).getBX() << " BX0 = " << (*mpcIt).getBX0() << std::endl;
+	  cout << "1: BX = " << (*mpcIt).getBX() << " BX0 = " << (*mpcIt).getBX0() <<" matchLCT "<< matchedLCT << std::endl;
 	} // for the matching if statement...
         //	if (me11a) strip_id+=16;
 //	else break;
